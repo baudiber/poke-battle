@@ -4,6 +4,8 @@ import SearchBar from './SearchBar';
 import TypeSelector from './TypeSelector';
 import Battle from './Battle';
 import { Header } from './Header';
+import { useTheme } from './ThemeContext';
+
 export interface Pokemon {
     id: number;
     types: PokemonType[];
@@ -33,7 +35,7 @@ const PokemonApp: React.FC = () => {
   const [currentCount, setCurrentCount] = useState(20);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon[]>([]);
   const [battle, setBattle] = useState<boolean>(false);
-
+  const { theme } = useTheme();
   useEffect(() => {
     const getPokemon = async () => {
         try {
@@ -138,7 +140,7 @@ const PokemonApp: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center'>
+    <div className={`${theme === "light" ? "bg-amber-50" : "bg-slate-800"} flex flex-col items-center`}>
       <Header selectedPokemons={selectedPokemon} setBattle={setBattle}/>
       <SearchBar onSearch={setSearchQuery} />
       <TypeSelector onTypeSelect={handleTypeSelection} types={pokemonTypes} />

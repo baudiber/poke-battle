@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { Pokemon } from "./PokemonApp";
+import { useTheme } from "./ThemeContext";
 
 interface CardProps {
     pokemon: Pokemon;
@@ -29,6 +30,7 @@ export const MiniCard: React.FC<CardProps> = ({ pokemon }) => {
 }
 
 const Card: React.FC<CardProps> = ({ pokemon, selected }) => {
+    const { theme } = useTheme();
     if (!pokemon) {
         return null;
     }
@@ -72,7 +74,7 @@ const Card: React.FC<CardProps> = ({ pokemon, selected }) => {
                       <img className='self-end' src={type.image} alt={type.name} style={{ width: "20px"}} />
                     ))}
                 </div>
-                <img className="outline outline-2  bg-white my-3" src={pokemon.imageUrl} alt={pokemon.name} style={{ width: 'auto' }} />
+                <img className={`${theme === "light" ? "bg-white" : "bg-blue-950"} outline outline-2 my-3`} src={pokemon.imageUrl} alt={pokemon.name} style={{ width: 'auto' }} />
                 <div>Attack: {pokemon.attack}</div>
                 <div>Defense: {pokemon.defense}</div>
                 <div>Speed: {pokemon.speed}</div>

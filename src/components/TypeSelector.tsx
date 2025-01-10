@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TiArrowSortedDown } from "react-icons/ti";
 import { RxCrossCircled } from "react-icons/rx";
 import { PokemonType } from './PokemonApp';
+import { useTheme } from './ThemeContext';
 
 
 interface TypeSelectorProps {
@@ -10,6 +11,7 @@ interface TypeSelectorProps {
 }
 
 const TypeSelector: React.FC<TypeSelectorProps> = ({ onTypeSelect, types }) => {
+  const { theme } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
@@ -24,9 +26,9 @@ const TypeSelector: React.FC<TypeSelectorProps> = ({ onTypeSelect, types }) => {
   };
 
   return (
-    <div className='flex flex-col items-center'>
+      <div className={`flex flex-col items-center`}>
       <button 
-        className="flex flex-col items-center"
+        className={`${theme === "light" ? "" : "text-white"} flex flex-col items-center`}
         onClick={() => setIsVisible(!isVisible)}
       >
         Advanced search
@@ -35,7 +37,7 @@ const TypeSelector: React.FC<TypeSelectorProps> = ({ onTypeSelect, types }) => {
       <div className={`${isVisible ? '' : 'hidden'} m-4 max-w-3xl text-center flex flex-wrap`}>
         {types.map((type) => (
           <button 
-            className={`${selectedTypes.includes(type.name) ? 'bg-amber-300' : 'bg-amber-100'} flex items-center rounded-md p-2 px-3 m-1 relative`} 
+            className={`${selectedTypes.includes(type.name) ? 'bg-amber-200' : 'bg-amber-400'} flex items-center rounded-md p-2 px-3 m-1 relative`} 
             onClick={() => handleChange(type.name)}
             key={type.name}
           >

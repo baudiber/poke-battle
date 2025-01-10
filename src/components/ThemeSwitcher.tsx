@@ -7,7 +7,7 @@ const ThemeSwitcher: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button onClick={toggleTheme} className={`${theme === 'dark' ? 'invert' : ''}`}>
+    <button onClick={toggleTheme} className={`max-w-fit`}>
       <div className='flex items-center'>{theme === 'light' ? <IoIosMoon/> : <IoIosSunny/>} {theme === 'light' ? 'dm' : 'lm'}</div>
     </button>
   );
