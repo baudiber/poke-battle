@@ -36,6 +36,7 @@ const PokemonApp: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon[]>([]);
   const [battle, setBattle] = useState<boolean>(false);
   const { theme } = useTheme();
+
   useEffect(() => {
     const getPokemon = async () => {
         try {
@@ -141,16 +142,16 @@ const PokemonApp: React.FC = () => {
 
   return (
     <div className={`${theme === "light" ? "bg-amber-50" : "bg-slate-800"} flex flex-col items-center`}>
+      <Battle pokemons={selectedPokemon} battle={battle} setBattle={setBattle} />
       <Header selectedPokemons={selectedPokemon} setBattle={setBattle}/>
       <SearchBar onSearch={setSearchQuery} />
       <TypeSelector onTypeSelect={handleTypeSelection} types={pokemonTypes} />
-      <PokemonList selectedPokemon={selectedPokemon} pokemon={filteredPokemon} onPokemonSelect={handlePokemonSelect}/>
+      {!battle && <PokemonList selectedPokemon={selectedPokemon} pokemon={filteredPokemon} onPokemonSelect={handlePokemonSelect}/>}
       {currentCount < pokemonList.length && (!selectedType && !searchQuery) &&(
         <button onClick={loadMore} className="bg-amber-300 rounded-xl p-2  px-3 m-5 mb-14 text-center">
           Load More
         </button>
       )}
-      <Battle pokemons={selectedPokemon} battle={battle} setBattle={setBattle} />
     </div>
   );
 };

@@ -9,7 +9,7 @@ interface CardProps {
 
 function throttle<T extends (...args: any[]) => any>(
     func: T,
-    delay: number
+    delay: number = 100
 ): (...args: Parameters<T>) => void {
     let lastCall = 0;
     return (...args: Parameters<T>) => {
@@ -48,7 +48,7 @@ const Card: React.FC<CardProps> = ({ pokemon, selected }) => {
           const rotateY = (centerX - x) / 10;
     
           setRotate({ x: rotateX, y: rotateY });
-        }, 100),
+        }),
         []
     );
     

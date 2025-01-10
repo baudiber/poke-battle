@@ -110,8 +110,8 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
     }
 
     return (
-        <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-amber-500 via-white to-red-500  flex flex-col items-center justify-between z-10 p-20 ${battle ? '' : 'hidden'}`}>
-            <h1 className='text-9xl text-center m-4 font-black'>Battle</h1>
+        <div className={`overflow-hidden fixed min-h-screen top-0 left-0 w-full bg-gradient-to-tr from-amber-500 via-white to-red-500  flex flex-col items-center justify-evenly z-20 p-20 ${battle ? '' : 'hidden'}`}>
+            <h1 className='text-7xl text-center m-4 font-black'>Battle</h1>
             <div className='self-end'>
                 <Card 
                     pokemon={pokemons[0]} 
@@ -125,8 +125,8 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
                     selected={false} 
                 />
             </div>
-            <BattleAnnouncer message={message} />
-            <button onClick={handleCloseBattle}>Close</button>
+            <BattleAnnouncer message={message}/>
+            <button className="p-4 outline outline-white rounded-2xl" onClick={handleCloseBattle}>Close</button>
         </div>
     );
 }
