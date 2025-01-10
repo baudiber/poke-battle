@@ -15,14 +15,22 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
     if (!battle || pokemons.length !== 2) {
         return null;
     }
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>("BATTLE BEGINS!");
     const [attackerHp, setAttackerHp] = useState<number>(pokemons[0].speed > pokemons[1].speed ? pokemons[0].hp : pokemons[1].hp);
     const [defenderHp, setDefenderHp] = useState<number>(pokemons[0].speed > pokemons[1].speed ? pokemons[1].hp : pokemons[0].hp);
     const [turn, setTurn] = useState<number>(0);
     const [inSequence, setInSequence] = useState<boolean>(false);
+    
+    useEffect(() => {
+        console.log(turn);
+        if (!battle || pokemons.length !== 2) return;
+        if (turn === 0) {
+            setTurn(1);
+        }
+    }, [battle]);
 
     useEffect(() => {
-        if (!battle || pokemons.length !== 2) return;
+        if (!battle || pokemons.length !== 2 || turn === 0) return;
         const attacker = pokemons[0].speed > pokemons[1].speed ? pokemons[0] : pokemons[1];
         const defender = attacker === pokemons[0] ? pokemons[1] : pokemons[0];
 
@@ -41,42 +49,24 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
                 setBattle(false);
                 return;
             }
-            setMessage('BATTLE BEGINS!');
-            await wait(2000);
         }
-        battleCheck();
-        if (turn === 0) {
-            setTurn(1);
-        }
-    }, [battle]);
-
-    useEffect(() => {
-        if (!battle || pokemons.length !== 2 || turn === 0) return;
-        const attacker = pokemons[0].speed > pokemons[1].speed ? pokemons[0] : pokemons[1];
-        const defender = attacker === pokemons[0] ? pokemons[1] : pokemons[0];
-
-        const attackerAttack = attacker.attack > defender.defense 
-            ? attacker.attack - defender.defense 
-            : 0;
-        const defenderAttack = defender.attack > attacker.defense 
-            ? defender.attack - attacker.defense 
-            : 0;
         const battleSequence = async () => {
             if (inSequence) return;
             setInSequence(true);
-            
             //attacker's turn
+            await wait(2000);
             setMessage(`${attacker.name} attacks ${defender.name} with ${attackerAttack} damage!`);
-            setDefenderHp(defenderHp - attackerAttack < 0 ? 0 : defenderHp - attackerAttack);
+            let updatedHP = defenderHp - attackerAttack < 0 ? 0 : defenderHp - attackerAttack;
+            setDefenderHp(updatedHP);
             await wait(2000);
             if (attackerAttack === 0) {
                 setMessage(`This is not very effective ...`);
                 await wait(2000);
             } else {
-                setMessage(`${defender.name} has ${defenderHp} HP left!`);
+                setMessage(`${defender.name} has ${updatedHP} HP left!`);
                 await wait(2000);
             }
-            if (defenderHp <= 0) {
+            if (updatedHP <= 0) {
                 setMessage(`${defender.name} has fainted ...`);
                 await wait(2000);
                 setMessage('BATTLE ENDS!');
@@ -86,16 +76,17 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
             }
             //defender's turn
             setMessage(`${defender.name} attacks ${attacker.name} with ${defenderAttack} damage!`);
-            setAttackerHp(attackerHp - defenderAttack < 0 ? 0 : attackerHp - defenderAttack);
+            updatedHP = attackerHp - defenderAttack < 0 ? 0 : attackerHp - defenderAttack;
+            setAttackerHp(updatedHP);
             await wait(2000);
             if (defenderAttack === 0) {
                 setMessage(`This is not very effective ...`);
                 await wait(2000);
             } else {
-                setMessage(`${attacker.name} has ${attackerHp} HP left!`);
+                setMessage(`${attacker.name} has ${updatedHP} HP left!`);
                 await wait(2000);
             }
-            if (attackerHp <= 0) {
+            if (updatedHP <= 0) {
                 setMessage(`${attacker.name} has fainted ...`);
                 await wait(2000);
                 setMessage('BATTLE ENDS!');
@@ -106,6 +97,7 @@ const Battle: React.FC<BattleProps> = ({ pokemons, battle, setBattle }) => {
             setInSequence(false);
             setTurn(turn + 1);
         };
+        battleCheck();
         battleSequence();
     }, [turn]);
 
